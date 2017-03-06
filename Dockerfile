@@ -10,14 +10,14 @@ ENV MINECRAFT_URL https://s3.amazonaws.com/Minecraft.Download/versions/${MINECRA
 ENV MINECRAFT_JAR minecraft_server.${MINECRAFT_VERSION}.jar
 ENV FORGE_URL http://files.minecraftforge.net/maven/net/minecraftforge/forge/${MINECRAFT_VERSION}-${FORGE_VERSION}-${MINECRAFT_VERSION}/${FORGE_INST}
 
+WORKDIR mineserver/
 RUN apt-get update && apt-get install -y software-properties-common wget \
 && echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu yakkety main" | tee -a /etc/apt/sources.list \
 && echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu yakkety main" | tee -a /etc/apt/sources.list \
 && echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections \
 && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886 \
-&& apt-get update && apt-get install -y oracle-java8-installer ca-certificates
-WORKDIR mineserver/
-RUN wget -q ${MINECRAFT_URL} && wget -q ${FORGE_URL} \
+&& apt-get update && apt-get install -y oracle-java8-installer ca-certificates \
+&& wget -q ${MINECRAFT_URL} && wget -q ${FORGE_URL} \
 && java -jar ${FORGE_INST} --installServer \
 && echo eula=true > eula.txt \
 && apt-get autoremove -y && apt-get clean
